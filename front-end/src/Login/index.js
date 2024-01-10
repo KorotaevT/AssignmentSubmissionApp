@@ -41,6 +41,7 @@ const Login = () => {
         <div>
             <label htmlFor='username'>Username</label>
             <input type='email' id="username" value={username} onChange={(event) => setUsername(event.target.value)}/>
+
         </div>
         <div>
             <label htmlFor='password'>Password</label>

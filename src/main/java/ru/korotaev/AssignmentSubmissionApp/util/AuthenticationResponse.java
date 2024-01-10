@@ -13,6 +13,5 @@ import ru.korotaev.AssignmentSubmissionApp.domain.User;
 public class AuthenticationResponse {
 
     private String token;
-
     private User user;
 }

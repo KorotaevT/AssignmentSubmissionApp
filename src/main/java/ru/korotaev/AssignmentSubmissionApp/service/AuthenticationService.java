@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.korotaev.AssignmentSubmissionApp.domain.Authority;
 import ru.korotaev.AssignmentSubmissionApp.enums.Role;
 import ru.korotaev.AssignmentSubmissionApp.domain.User;
 import ru.korotaev.AssignmentSubmissionApp.repository.UserRepository;
@@ -13,6 +14,7 @@ import ru.korotaev.AssignmentSubmissionApp.util.AuthenticationResponse;
 import ru.korotaev.AssignmentSubmissionApp.util.RegisterRequest;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,15 +27,16 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        Authority authority = new Authority(request.getRole());
         var user = User.builder()
                 .cohortStartDate(LocalDate.now())
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.User)
+                .authorities(List.of(authority))
                 .build();
+        authority.setUser(user);
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        user.setPassword(null);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .user(user)
@@ -48,7 +51,6 @@ public class AuthenticationService {
         var user =  repository.findByUsername(request.getUsername())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-        user.setPassword(null);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .user(user)

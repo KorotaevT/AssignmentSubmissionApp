@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import ru.korotaev.AssignmentSubmissionApp.enums.Role;
 
 import java.util.Optional;
 
@@ -20,8 +21,17 @@ public class Authority implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String authority;
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @ManyToOne(optional = false)
     private User user;
 
+    public Authority(Role role) {
+        this.role = role;
+    }
+
+    @Override
+    public String getAuthority() {
+        return role.name();
+    }
 }

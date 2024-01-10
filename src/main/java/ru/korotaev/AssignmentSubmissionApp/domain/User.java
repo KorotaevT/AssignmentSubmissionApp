@@ -1,5 +1,6 @@
 package ru.korotaev.AssignmentSubmissionApp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import ru.korotaev.AssignmentSubmissionApp.enums.Role;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,9 +28,11 @@ public class User implements UserDetails {
     private Long id;
     private LocalDate cohortStartDate;
     private String username;
+    @JsonIgnore
     private String password;
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Authority> authorities = new ArrayList<>();
 
     @Override
     public String getUsername(){
@@ -42,7 +46,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return authorities;
     }
 
     @Override
