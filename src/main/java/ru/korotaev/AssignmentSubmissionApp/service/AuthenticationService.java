@@ -27,7 +27,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        Authority authority = new Authority(request.getRole());
+        Authority authority = new Authority(Role.STUDENT);
         var user = User.builder()
                 .cohortStartDate(LocalDate.now())
                 .username(request.getUsername())
