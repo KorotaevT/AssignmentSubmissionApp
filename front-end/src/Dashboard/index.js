@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useLocalState } from "../util/useLocalStorage";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
 import Card from "react-bootstrap/Card";
 import { Badge, Button, Col, Row } from "react-bootstrap";
+import StatusBadge from "../StatusBadge";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [jwt, setJwt] = useLocalState("", "jwt");
   const [assignments, setAssignments] = useState(null);
 
@@ -30,8 +32,8 @@ const Dashboard = () => {
       <Row>
         <Col>
           <div
-          className="d-flex justify-content-end"
-          style={{cursor: "pointer"}}
+            className="d-flex justify-content-end"
+            style={{ cursor: "pointer" }}
             onClick={() => {
               setJwt(null);
               window.location.href = "/login";
@@ -59,9 +61,7 @@ const Dashboard = () => {
               <Card.Body className="d-flex flex-column justify-content-around">
                 <Card.Title>Assignment #{assignment.number}</Card.Title>
                 <div className="d-flex align-items-strat">
-                  <Badge pill bg="info" style={{ fontSize: "1em" }}>
-                    {assignment.status}
-                  </Badge>
+                  <StatusBadge text={assignment.status} />
                 </div>
                 <Card.Text style={{ marginTop: "1m" }}>
                   <p>

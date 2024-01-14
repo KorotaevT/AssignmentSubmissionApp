@@ -15,8 +15,8 @@ import {
 import StatusBadge from "../StatusBadge";
 import { useNavigate } from "react-router-dom";
 
-const AssignmentView = () => {
-  let navigate = useNavigate();
+const CodeReviewerAssignmentView = () => {
+    const navigate = useNavigate();
   const [jwt, setJwt] = useLocalState("", "jwt");
   const assignmentId = window.location.href.split("/assignments/")[1];
   const [assignment, setAssignment] = useState({
@@ -89,34 +89,6 @@ const AssignmentView = () => {
 
       {assignment ? (
         <>
-          <Form.Group as={Row} className="my-4" controlId="assignmentName">
-            <Form.Label column sm="3" md="2">
-              Assignment Number:
-            </Form.Label>
-            <Col sm="9" md="8" lg="6">
-              <DropdownButton
-                as={ButtonGroup}
-                variant={"info"}
-                title={
-                  assignment.number
-                    ? `Assignment ${assignment.number}`
-                    : "Select an Assignment"
-                }
-                onSelect={(selectedElement) => {
-                  updateAssignment("number", selectedElement);
-                }}
-              >
-                {assignmentEnums.map((assignmentEnum) => (
-                  <Dropdown.Item
-                    key={assignmentEnum.assignmentNum}
-                    eventKey={assignmentEnum.assignmentNum}
-                  >
-                    {assignmentEnum.assignmentNum}
-                  </Dropdown.Item>
-                ))}
-              </DropdownButton>
-            </Col>
-          </Form.Group>
           <Form.Group as={Row} className="my-4" controlId="githubUrl">
             <Form.Label column sm="3" md="2">
               GitHub URL:
@@ -125,6 +97,7 @@ const AssignmentView = () => {
               <Form.Control
                 type="url"
                 onChange={(e) => updateAssignment("githubUrl", e.target.value)}
+                readOnly
                 value={assignment.githubUrl}
                 placeholder="https://github.com/username/repo-name"
               />
@@ -138,68 +111,71 @@ const AssignmentView = () => {
               <Form.Control
                 type="text"
                 placeholder="example_branch_main"
+                readOnly
                 onChange={(e) => updateAssignment("branch", e.target.value)}
                 value={assignment.branch}
               />
             </Col>
           </Form.Group>
+          <Form.Group as={Row} className="mb-3" controlId="codeReviewUrl">
+            <Form.Label column sm="3" md="2">
+              Video Review URL:
+            </Form.Label>
+            <Col sm="9" md="8" lg="6">
+              <Form.Control
+                type="url"
+                placeholder="https://screencast-o-matic.com/something"
+                onChange={(e) =>
+                  updateAssignment("codeReviewUrl", e.target.value)
+                }
+                value={assignment.codeReviewUrl}
+              />
+            </Col>
+          </Form.Group>
 
-          {assignment.status === "Completed" ? (
-            <>
-              <Form.Group
-                as={Row}
-                className="d-flex align-items-center mb-3"
-                controlId="codeReviewUrl"
-              >
-                <Form.Label column sm="3" md="2">
-                  Code Review Video URL:
-                </Form.Label>
-                <Col sm="9" md="8" lg="6">
-                  <a
-                    href={assignment.codeReviewUrl}
-                    style={{ fontWeight: "bold" }}
-                  >
-                    {assignment.codeReviewUrl}
-                  </a>
-                </Col>
-              </Form.Group>
-              <div className="d-flex gap-5">
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  onClick={() => navigate("/dashboard")}
-                >
-                  Back
-                </Button>
-              </div>
-            </>
-          ) : assignment.status === "Pending Submission" ? (
-            <div className="d-flex gap-5">
-              <Button size="lg" onClick={() => save("Submitted")}>
-                Submit Assignment
-              </Button>
+          <div className="d-flex gap-5">
+            {assignment.status === "Completed" ? (
               <Button
                 size="lg"
                 variant="secondary"
-                onClick={() => navigate("/dashboard")}
+                onClick={() => save(assignmentStatuses[2].status)}
               >
-                Back
+                Re-Claim
               </Button>
-            </div>
-          ) : (
-            <div className="d-flex gap-5">
-              <Button size="lg" onClick={() => save("Resubmitted")}>
-                Resubmit Assignment
+            ) : (
+              <Button
+                size="lg"
+                onClick={() => save(assignmentStatuses[4].status)}
+              >
+                Complete Review
               </Button>
+            )}
+            {assignment.status === "Needs Update" ? (
               <Button
                 size="lg"
                 variant="secondary"
-                onClick={() => navigate("/dashboard")}
+                onClick={() => save(assignmentStatuses[2].status)}
               >
-                Back
+                Re-Claim
               </Button>
-            </div>
-          )}
+            ) : (
+              <Button
+                size="lg"
+                variant="danger"
+                onClick={() => save(assignmentStatuses[3].status)}
+              >
+                Reject Assignment
+              </Button>
+            )}
+
+            <Button
+              size="lg"
+              variant="secondary"
+              onClick={() => navigate("/dashboard")}
+            >
+              Back
+            </Button>
+          </div>
         </>
       ) : (
         <></>
@@ -208,4 +184,4 @@ const AssignmentView = () => {
   );
 };
 
-export default AssignmentView;
+export default CodeReviewerAssignmentView;

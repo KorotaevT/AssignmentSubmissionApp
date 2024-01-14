@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useLocalState } from "../util/useLocalStorage";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
 import Card from "react-bootstrap/Card";
 import { Badge, Button, Col, Container, Row } from "react-bootstrap";
 import { jwtDecode } from "jwt-decode";
+import StatusBadge from "../StatusBadge";
 
 const CodeReviewerDashboard = () => {
+  const navigate = useNavigate();
   const [jwt, setJwt] = useLocalState("", "jwt");
   const [assignments, setAssignments] = useState(null);
+
+  function editReview(assignment) {
+    window.location.href = `/assignments/${assignment.id}`;
+  }
 
   function claimAssignment(assignment) {
     const decodedJwt = jwtDecode(jwt);
@@ -62,8 +68,7 @@ const CodeReviewerDashboard = () => {
       <div className="assignment-wrapper in-review">
         <div className="assignment-wrapper-title h3 px-2">In Review</div>
         {assignments &&
-        assignments
-          .filter((assignment) => assignment.status === "In Review")
+        assignments.filter((assignment) => assignment.status === "In Review")
           .length > 0 ? (
           <div
             className="d-grid gap-5"
@@ -79,9 +84,7 @@ const CodeReviewerDashboard = () => {
                   <Card.Body className="d-flex flex-column justify-content-around">
                     <Card.Title>Assignment #{assignment.number}</Card.Title>
                     <div className="d-flex align-items-strat">
-                      <Badge pill bg="info" style={{ fontSize: "1em" }}>
-                        {assignment.status}
-                      </Badge>
+                      <StatusBadge text={assignment.status} />
                     </div>
                     <Card.Text style={{ marginTop: "1m" }}>
                       <p>
@@ -94,32 +97,42 @@ const CodeReviewerDashboard = () => {
                     <Button
                       variant="secondary"
                       onClick={() => {
-                        claimAssignment(assignment);
+                        editReview(assignment);
                       }}
                     >
-                      Claim
+                      Edit
                     </Button>
                   </Card.Body>
                 </Card>
               ))}
           </div>
         ) : (
-            <div>No assignments found</div>
+          <div>No assignments found</div>
         )}
       </div>
 
       <div className="assignment-wrapper submitted">
         <div className="assignment-wrapper-title h3 px-2">Awaiting Review</div>
         {assignments &&
-        assignments
-          .filter((assignment) => assignment.status === "Submitted")
-          .length > 0 ? (
+        assignments.filter(
+          (assignment) =>
+            assignment.status === "Submitted" ||
+            assignment.status === "Resubmitted"
+        ).length > 0 ? (
           <div
             className="d-grid gap-5"
             style={{ gridTemplateColumns: "repeat(auto-fit, 18rem)" }}
           >
             {assignments
-              .filter((assignment) => assignment.status === "Submitted")
+              .filter(
+                (assignment) =>
+                  assignment.status === "Submitted" ||
+                  assignment.status === "Resubmitted"
+              )
+              .sort((a, b) => {
+                if (a.status === "Resubmitted") return -1;
+                else return 1;
+              })
               .map((assignment) => (
                 <Card
                   key={assignment.id}
@@ -128,9 +141,7 @@ const CodeReviewerDashboard = () => {
                   <Card.Body className="d-flex flex-column justify-content-around">
                     <Card.Title>Assignment #{assignment.number}</Card.Title>
                     <div className="d-flex align-items-strat">
-                      <Badge pill bg="info" style={{ fontSize: "1em" }}>
-                        {assignment.status}
-                      </Badge>
+                      <StatusBadge text={assignment.status} />
                     </div>
                     <Card.Text style={{ marginTop: "1m" }}>
                       <p>
@@ -153,16 +164,15 @@ const CodeReviewerDashboard = () => {
               ))}
           </div>
         ) : (
-            <div>No assignments found</div>
+          <div>No assignments found</div>
         )}
       </div>
       <div className="assignment-wrapper needs-update">
         <div className="assignment-wrapper-title h3 px-2">Needs Update</div>
         {assignments &&
-        assignments
-          .filter((assignment) => assignment.status === "Needs Update")
+        assignments.filter((assignment) => assignment.status === "Needs Update")
           .length > 0 ? (
-          <div  
+          <div
             className="d-grid gap-5"
             style={{ gridTemplateColumns: "repeat(auto-fit, 18rem)" }}
           >
@@ -176,9 +186,7 @@ const CodeReviewerDashboard = () => {
                   <Card.Body className="d-flex flex-column justify-content-around">
                     <Card.Title>Assignment #{assignment.number}</Card.Title>
                     <div className="d-flex align-items-strat">
-                      <Badge pill bg="info" style={{ fontSize: "1em" }}>
-                        {assignment.status}
-                      </Badge>
+                      <StatusBadge text={assignment.status} />
                     </div>
                     <Card.Text style={{ marginTop: "1m" }}>
                       <p>
@@ -191,10 +199,10 @@ const CodeReviewerDashboard = () => {
                     <Button
                       variant="secondary"
                       onClick={() => {
-                        claimAssignment(assignment);
+                        window.location.href = `/assignments/${assignment.id}`;
                       }}
                     >
-                      Claim
+                      View
                     </Button>
                   </Card.Body>
                 </Card>
