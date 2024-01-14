@@ -1,4 +1,4 @@
-package ru.korotaev.AssignmentSubmissionApp.domain;
+package ru.korotaev.AssignmentSubmissionApp.model;
 
 
 import jakarta.persistence.*;
@@ -8,8 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import ru.korotaev.AssignmentSubmissionApp.enums.Role;
-
-import java.util.Optional;
 
 @Entity
 @Data

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.korotaev.AssignmentSubmissionApp.domain.User;
+import ru.korotaev.AssignmentSubmissionApp.model.User;
 
 @Data
 @Builder

@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+.assignment-wrapper {
+  border: 1px dashed gray;
+  padding: 2em;
+  border-radius: 1em;
+  margin-top: 2em;
+}
+
+.assignment-wrapper-title {
+  width: min-content !important;
+  margin-top: -2em !important;
+  margin-bottom: 1em !important;
+  background-Color: white !important;
+  white-space: nowrap !important;
+}

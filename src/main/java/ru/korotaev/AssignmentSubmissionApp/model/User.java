@@ -1,12 +1,10 @@
-package ru.korotaev.AssignmentSubmissionApp.domain;
+package ru.korotaev.AssignmentSubmissionApp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.korotaev.AssignmentSubmissionApp.enums.Role;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

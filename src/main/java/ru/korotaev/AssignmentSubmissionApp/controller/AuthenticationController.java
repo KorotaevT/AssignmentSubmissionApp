@@ -1,17 +1,13 @@
 package ru.korotaev.AssignmentSubmissionApp.controller;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.korotaev.AssignmentSubmissionApp.domain.User;
+import ru.korotaev.AssignmentSubmissionApp.model.User;
 import ru.korotaev.AssignmentSubmissionApp.service.AuthenticationService;
 import ru.korotaev.AssignmentSubmissionApp.service.JwtService;
 import ru.korotaev.AssignmentSubmissionApp.util.AuthenticationRequest;

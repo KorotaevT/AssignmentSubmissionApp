@@ -1,7 +1,7 @@
 package ru.korotaev.AssignmentSubmissionApp.dto;
 
 import lombok.Data;
-import ru.korotaev.AssignmentSubmissionApp.domain.Assignment;
+import ru.korotaev.AssignmentSubmissionApp.model.Assignment;
 import ru.korotaev.AssignmentSubmissionApp.enums.AssignmentEnum;
 import ru.korotaev.AssignmentSubmissionApp.enums.AssignmentStatusEnum;
 

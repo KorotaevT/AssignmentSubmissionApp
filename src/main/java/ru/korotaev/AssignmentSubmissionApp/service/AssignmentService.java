@@ -2,9 +2,10 @@ package ru.korotaev.AssignmentSubmissionApp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.korotaev.AssignmentSubmissionApp.domain.Assignment;
-import ru.korotaev.AssignmentSubmissionApp.domain.User;
+import ru.korotaev.AssignmentSubmissionApp.model.Assignment;
+import ru.korotaev.AssignmentSubmissionApp.model.User;
 import ru.korotaev.AssignmentSubmissionApp.enums.AssignmentStatusEnum;
+import ru.korotaev.AssignmentSubmissionApp.enums.Role;
 import ru.korotaev.AssignmentSubmissionApp.repository.AssignmentRepository;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class AssignmentService {
     }
 
     private Integer findNextAssignmentToSubmit(User user) {
-        List<Assignment> assignmentsByUser = assignmentRepository.findByUser(user);
+        Set<Assignment> assignmentsByUser = assignmentRepository.findByUser(user);
         if (assignmentsByUser == null) {
             return 1;
         }
@@ -45,8 +46,14 @@ public class AssignmentService {
         return nextAssignmentNumOpt.orElse(1);
     }
 
-    public List<Assignment> findByUser(User user) {
-        return assignmentRepository.findByUser(user);
+    public Set<Assignment> findByUser(User user) {
+        boolean hasCodeReviewerCodeRole = user.getAuthorities()
+                .stream().anyMatch(auth -> Role.REVIEWER.name().equals(auth.getAuthority()));
+        if(hasCodeReviewerCodeRole){
+            return assignmentRepository.findByCodeReviewer(user);
+        }else{
+            return assignmentRepository.findByUser(user);
+        }
     }
 
     public Optional<Assignment> findById(Long assignmentId) {

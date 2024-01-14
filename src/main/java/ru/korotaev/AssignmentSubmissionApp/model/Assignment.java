@@ -1,4 +1,4 @@
-package ru.korotaev.AssignmentSubmissionApp.domain;
+package ru.korotaev.AssignmentSubmissionApp.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,4 +19,6 @@ public class Assignment {
     private String codeReviewUrl;
     @ManyToOne(optional = false)
     private User user;
+    @ManyToOne
+    private User codeReviewer;
 }
