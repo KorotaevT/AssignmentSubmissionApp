@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { useLocalState } from "../util/useLocalStorage";
 import { Navigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
+import { useUser } from "../UserProvider";
 
 const PrivateRoute = ({ children }) => {
-  const [jwt, setJwt] = useLocalState("", "jwt");
+  const user = useUser();
   const [isLoading, setIsLoading] = useState(true);
   const [isValid, setIsValid] = useState(null);
 
-  if (jwt) {
+  if (user) {
     ajax(
-      `http://localhost:8080/api/auth/validation?token=${jwt}`,
+      `http://localhost:8080/api/auth/validation?token=${user.jwt}`,
       "GET",
-      jwt
+      user.jwt
     ).then((isValid) => {
       setIsValid(isValid);
       setIsLoading(false);

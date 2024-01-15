@@ -1,31 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocalState } from "../util/useLocalStorage";
 import ajax from "../Services/fetchService";
-import {
-  Badge,
-  Button,
-  ButtonGroup,
-  Col,
-  Container,
-  Dropdown,
-  DropdownButton,
-  Form,
-  Row,
-} from "react-bootstrap";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import StatusBadge from "../StatusBadge";
-import { useNavigate } from "react-router-dom";
+import { useUser } from "../UserProvider";
+import { useNavigate, useParams } from "react-router-dom";
 
 const CodeReviewerAssignmentView = () => {
-    const navigate = useNavigate();
-  const [jwt, setJwt] = useLocalState("", "jwt");
-  const assignmentId = window.location.href.split("/assignments/")[1];
+  const navigate = useNavigate();
+  const { assignmentId } = useParams();
+  const user = useUser();
+
   const [assignment, setAssignment] = useState({
     branch: "",
     githubUrl: "",
-    number: null,
+    number: "",
     status: null,
   });
-  const [assignmentEnums, setAssignmentEnums] = useState([]);
   const [assignmentStatuses, setAssignmentStatuses] = useState([]);
   const prevAssignmentValue = useRef(assignment);
 
@@ -47,7 +37,7 @@ const CodeReviewerAssignmentView = () => {
     ajax(
       `http://localhost:8080/api/assignments/${assignmentId}`,
       "PUT",
-      jwt,
+      user.jwt,
       assignment
     ).then((assignmentData) => {
       setAssignment(assignmentData);
@@ -65,14 +55,12 @@ const CodeReviewerAssignmentView = () => {
     ajax(
       `http://localhost:8080/api/assignments/${assignmentId}`,
       "GET",
-      jwt
-    ).then((assignmentResponse) => {
-      let assignmentData = assignmentResponse.assignment;
+      user.jwt
+    ).then((assignmentData) => {
       if (assignmentData.branch === null) assignmentData.branch = "";
       if (assignmentData.githubUrl === null) assignmentData.githubUrl = "";
-      setAssignment(assignmentData);
-      setAssignmentEnums(assignmentResponse.assignmentEnums);
-      setAssignmentStatuses(assignmentResponse.assignmentStatusEnum);
+      setAssignment(assignmentData.assignment);
+      setAssignmentStatuses(assignmentData.assignmentStatusEnum);
     });
   }, []);
 
@@ -80,7 +68,7 @@ const CodeReviewerAssignmentView = () => {
     <Container className="mt-5">
       <Row className="d-flex align-items-center">
         <Col>
-          {assignment.number ? <h1>Assignment {assignment.number}</h1> : <></>}
+          {assignment.number && <h1> Assignment {assignment.number} </h1>}
         </Col>
         <Col>
           <StatusBadge text={assignment.status} />

@@ -71,6 +71,7 @@ public class AuthenticationController {
 
     @GetMapping("/validation")
     public ResponseEntity<?> validateToken(@RequestParam String token, @AuthenticationPrincipal User user){
+        System.out.println("1");
             boolean isTokenValid = jwtService.isTokenValid(token, user);
             return ResponseEntity.ok(isTokenValid);
     }

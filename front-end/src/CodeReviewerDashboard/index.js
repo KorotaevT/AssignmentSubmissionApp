@@ -6,27 +6,35 @@ import Card from "react-bootstrap/Card";
 import { Badge, Button, Col, Container, Row } from "react-bootstrap";
 import { jwtDecode } from "jwt-decode";
 import StatusBadge from "../StatusBadge";
+import { useUser } from "../UserProvider";
 
 const CodeReviewerDashboard = () => {
   const navigate = useNavigate();
-  const [jwt, setJwt] = useLocalState("", "jwt");
+  const user = useUser();
+  const [users, setUsers] = useState([]);
   const [assignments, setAssignments] = useState(null);
+
+  useEffect(() => {
+    if (!user.jwt) {
+        navigate("/login");
+    }
+});
 
   function editReview(assignment) {
     window.location.href = `/assignments/${assignment.id}`;
   }
 
   function claimAssignment(assignment) {
-    const decodedJwt = jwtDecode(jwt);
-    const user = {
+    const decodedJwt = jwtDecode(user.jwt);
+    const codeReviewer = {
       username: decodedJwt.sub,
     };
-    assignment.codeReviewer = user;
+    assignment.codeReviewer = codeReviewer;
     assignment.status = "In Review";
     ajax(
       `http://localhost:8080/api/assignments/${assignment.id}`,
       "PUT",
-      jwt,
+      user.jwt,
       assignment
     ).then((updatedAssignment) => {
       const assignmentsCopy = [...assignments];
@@ -37,12 +45,12 @@ const CodeReviewerDashboard = () => {
   }
 
   useEffect(() => {
-    ajax("http://localhost:8080/api/assignments", "GET", jwt).then(
+    ajax("http://localhost:8080/api/assignments", "GET", user.jwt).then(
       (assignmentsData) => {
         setAssignments(assignmentsData);
       }
     );
-  }, [jwt]);
+  }, [user.jwt]);
 
   return (
     <Container>
@@ -52,7 +60,7 @@ const CodeReviewerDashboard = () => {
             className="d-flex justify-content-end"
             style={{ cursor: "pointer" }}
             onClick={() => {
-              setJwt(null);
+              user.setJwt(null);
               window.location.href = "/login";
             }}
           >

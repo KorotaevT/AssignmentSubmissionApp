@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
-import { useLocalState } from "./util/useLocalStorage";
 import { Route, Routes } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Dashboard from "./Dashboard";
@@ -11,17 +10,21 @@ import PrivateRoute from "./PrivateRoute";
 import AssignmentView from "./AssignmentView";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CodeReviewerAssignmentView from "./CodeReviewerAssignmentView";
+import { useUser } from "./UserProvider";
 
 function App() {
-  const [jwt, setJwt] = useLocalState("", "jwt");
-  const [roles, setRoles] = useState(getRolesFromJwt());
+  const [roles, setRoles] = useState([]);
+  const user = useUser();
+
+  useEffect(() => {
+    setRoles(getRolesFromJwt());
+}, [user.jwt]);
+
 
   function getRolesFromJwt() {
-    if (jwt) {
-      const decodedJwt = jwtDecode(jwt);
-      return decodedJwt.authorities;
-    } else {
-      return [];
+    if (user.jwt) {
+      const decodeJwt = jwtDecode(user.jwt);
+      return decodeJwt.authorities;
     }
   }
 
@@ -30,7 +33,7 @@ function App() {
       <Route
         path="/dashboard"
         element={
-          roles.find((role) => role === "REVIEWER") ? (
+          roles && roles.find((role) => role === "REVIEWER") ? (
             <PrivateRoute>
               <CodeReviwerDashboard />
             </PrivateRoute>
@@ -42,15 +45,17 @@ function App() {
         }
       />
       <Route
-        path="/assignments/:id"
+        path="/assignments/:assignmentId"
         element={
-          roles.find((role) => role === "REVIEWER") ?
-          <PrivateRoute>
-            <CodeReviewerAssignmentView />
-          </PrivateRoute>:
-          <PrivateRoute>
-            <AssignmentView />
-          </PrivateRoute>
+          roles && roles.find((role) => role === "REVIEWER") ? (
+            <PrivateRoute>
+              <CodeReviewerAssignmentView />
+            </PrivateRoute>
+          ) : (
+            <PrivateRoute>
+              <AssignmentView />
+            </PrivateRoute>
+          )
         }
       />
       <Route path="/login" element={<Login />} />

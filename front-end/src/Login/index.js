@@ -1,14 +1,19 @@
-import React, { useState } from "react";
-import { useLocalState } from "../util/useLocalStorage";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Row, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../UserProvider";
 
 const Login = () => {
+  const user = useUser();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const [jwt, setJwt] = useLocalState("", "jwt");
+  useEffect(() => {
+    if (user.jwt) {
+      window.location.href = `/dashboard`;
+    }
+  }, [user.jwt]);
 
   function sendLoginRequest() {
     const reqBody = {
@@ -18,9 +23,10 @@ const Login = () => {
 
     fetch("http://localhost:8080/api/auth/authentication", {
       headers: {
+        "Access-Control-Allow-Origin": "http://localhost:3000",
         "Content-Type": "application/json",
       },
-      method: "post",
+      method: "POST",
       body: JSON.stringify(reqBody),
     })
       .then((response) => {
@@ -29,7 +35,7 @@ const Login = () => {
         else return Promise.reject("Invalid login attempt");
       })
       .then(([body, headers]) => {
-        setJwt(headers.get("authorization"));
+        user.setJwt(headers.get("authorization"));
         window.location.href = "/dashboard";
       })
       .catch((message) => {
@@ -84,7 +90,7 @@ const Login = () => {
             <Button
               variant="secondary"
               type="button"
-              onClick={() => (navigate("/"))}
+              onClick={() => navigate("/")}
             >
               Exit
             </Button>

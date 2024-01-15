@@ -13,12 +13,12 @@ import {
   Row,
 } from "react-bootstrap";
 import StatusBadge from "../StatusBadge";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AssignmentView = () => {
   let navigate = useNavigate();
   const [jwt, setJwt] = useLocalState("", "jwt");
-  const assignmentId = window.location.href.split("/assignments/")[1];
+  const { assignmentId } = useParams();
   const [assignment, setAssignment] = useState({
     branch: "",
     githubUrl: "",
