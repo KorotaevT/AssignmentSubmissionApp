@@ -9,12 +9,6 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    if (user.jwt) {
-      window.location.href = `/dashboard`;
-    }
-  }, [user.jwt]);
-
   function sendLoginRequest() {
     const reqBody = {
       username: username,

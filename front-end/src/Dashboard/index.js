@@ -18,7 +18,10 @@ const Dashboard = () => {
         setAssignments(assignmentsData);
       }
     );
-    if(!user.jwt) navigate("/login");
+    if(!user.jwt){
+      user.jwt = ""
+      navigate("/login");
+    }
   }, [user.jwt]);
 
   function createAssignment() {

@@ -3,6 +3,7 @@ package ru.korotaev.AssignmentSubmissionApp.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.korotaev.AssignmentSubmissionApp.model.Assignment;
+import ru.korotaev.AssignmentSubmissionApp.model.Comment;
 import ru.korotaev.AssignmentSubmissionApp.model.User;
 
 import java.util.Set;

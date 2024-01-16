@@ -14,10 +14,11 @@ import {
 } from "react-bootstrap";
 import StatusBadge from "../StatusBadge";
 import { useNavigate, useParams } from "react-router-dom";
+import { useUser } from "../UserProvider";
 
 const AssignmentView = () => {
   let navigate = useNavigate();
-  const [jwt, setJwt] = useLocalState("", "jwt");
+  const user = useUser();
   const { assignmentId } = useParams();
   const [assignment, setAssignment] = useState({
     branch: "",
@@ -28,6 +29,39 @@ const AssignmentView = () => {
   const [assignmentEnums, setAssignmentEnums] = useState([]);
   const [assignmentStatuses, setAssignmentStatuses] = useState([]);
   const prevAssignmentValue = useRef(assignment);
+  const [comment, setComment] = useState({
+    text: "",
+    assignmentId: assignmentId != null ? parseInt(assignmentId) : null,
+    user: user.jwt,
+  });
+  const [comments, setComments] = useState([]);
+
+  function submitComment() {
+    ajax(`http://localhost:8080/api/comments`, "POST", user.jwt, comment).then(
+      (commentsData) => {
+        const commentsCopy = [...comments];
+        commentsCopy.push(commentsData);
+
+        setComments(commentsCopy);
+      }
+    );
+  }
+
+  useEffect(() => {
+    ajax(
+      `http://localhost:8080/api/comments?assignmentId=${assignmentId}`,
+      "GET",
+      user.jwt
+    ).then((commentsData) => {
+      setComments(commentsData);
+    });
+  }, []);
+
+  function updateComment(value) {
+    const commentCopy = { ...comment };
+    commentCopy.text = value;
+    setComment(commentCopy);
+  }
 
   function updateAssignment(prop, value) {
     const newAssignment = { ...assignment };
@@ -47,7 +81,7 @@ const AssignmentView = () => {
     ajax(
       `http://localhost:8080/api/assignments/${assignmentId}`,
       "PUT",
-      jwt,
+      user.jwt,
       assignment
     ).then((assignmentData) => {
       setAssignment(assignmentData);
@@ -65,7 +99,7 @@ const AssignmentView = () => {
     ajax(
       `http://localhost:8080/api/assignments/${assignmentId}`,
       "GET",
-      jwt
+      user.jwt
     ).then((assignmentResponse) => {
       let assignmentData = assignmentResponse.assignment;
       if (assignmentData.branch === null) assignmentData.branch = "";
@@ -200,6 +234,23 @@ const AssignmentView = () => {
               </Button>
             </div>
           )}
+          <div className="mt-5">
+            <textarea
+              style={{ width: "100%", borderRadius: "0.25em" }}
+              onChange={(e) => updateComment(e.target.value)}
+            ></textarea>
+            <Button onClick={() => submitComment()}>Post comment</Button>
+          </div>
+          <div className="mt-5">
+            {comments.map((comment) => (
+              <div>
+                <span style={{ fontWeight: "bold" }}>
+                  {`[${comment.createdDate}] ${comment.createdBy.username}: `}
+                </span>
+                {comment.text}
+              </div>
+            ))}
+          </div>
         </>
       ) : (
         <></>
