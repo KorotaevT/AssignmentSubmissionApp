@@ -23,10 +23,11 @@ public class CommentService {
 
     public Comment save(CommentDto commentDto, User user) {
         Comment comment = Comment.builder()
+                .id(commentDto.getId())
                 .text(commentDto.getText())
                 .createdBy(user)
                 .assignment(assignmentRepository.findById(commentDto.getAssignmentId()).orElse(null))
-                .createdDate(LocalDateTime.now())
+                .createdDate((commentDto.getId()) == null ? LocalDateTime.now() : commentRepository.findById(commentDto.getId()).get().getCreatedDate())
                 .build();
         return commentRepository.save(comment);
     }
