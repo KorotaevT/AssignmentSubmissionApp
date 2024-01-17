@@ -1,11 +1,37 @@
 import React from "react";
+import { Button } from "react-bootstrap";
+import { useUser } from "../UserProvider";
+import { useNavigate } from "react-router-dom";
 
-const Homepage = () => {
-  return (
-    <div>
-      <h1>Homepage</h1>
-    </div>
-  );
+const HomePage = () => {
+    const user = useUser();
+    const navigate = useNavigate();
+
+    return (
+        <div className="center-container">
+            <h1>HomePage</h1>
+            <div className="button-container mt-4">
+                <Button
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                        user.setJwt(null);
+                        navigate("/login");
+                    }}
+                >
+                    Login
+                </Button>
+                <Button
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                        user.setJwt(null);
+                        navigate("/registration");
+                    }}
+                >
+                    Register
+                </Button>
+            </div>
+        </div>
+    );
 };
 
-export default Homepage;
+export default HomePage;

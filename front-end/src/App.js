@@ -11,6 +11,7 @@ import AssignmentView from "./AssignmentView";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CodeReviewerAssignmentView from "./CodeReviewerAssignmentView";
 import { useUser } from "./UserProvider";
+import Register from "./Register";
 
 function App() {
   const [roles, setRoles] = useState([]);
@@ -60,6 +61,7 @@ function App() {
       />
       <Route path="/login" element={<Login />} />
       <Route path="/" element={<Homepage />} />
+      <Route path="/registration" element={<Register />} />
     </Routes>
   );
 }

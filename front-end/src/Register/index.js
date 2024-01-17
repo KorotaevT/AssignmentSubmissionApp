@@ -18,13 +18,13 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  function sendLoginRequest() {
+  function sendRegisterRequest() {
     const reqBody = {
       username: username,
       password: password,
     };
 
-    fetch("http://localhost:8080/api/auth/authentication", {
+    fetch("http://localhost:8080/api/auth/registration", {
       headers: {
         "Access-Control-Allow-Origin": "http://localhost:3000",
         "Content-Type": "application/json",
@@ -35,7 +35,7 @@ const Login = () => {
       .then((response) => {
         if (response.status === 200)
           return Promise.all([response.json(), response.headers]);
-        else return Promise.reject("Invalid login attempt");
+        else return Promise.reject("Error in creating an account");
       })
       .then(([body, headers]) => {
         user.setJwt(headers.get("authorization"));
@@ -64,7 +64,7 @@ const Login = () => {
             style={{ borderRadius: "1rem", maxWidth: "500px" }}
           >
             <MDBCardBody className="p-5 w-100 d-flex flex-column">
-              <h2 className="fw-bold mb-2 text-center">Sign in</h2>
+              <h2 className="fw-bold mb-2 text-center">Registration</h2>
               <p className="text-white-50 mb-3">
                 Please enter your login and password!
               </p>
@@ -90,15 +90,15 @@ const Login = () => {
                 size="lg"
                 id="submit"
                 type="button"
-                onClick={() => sendLoginRequest()}
+                onClick={() => sendRegisterRequest()}
               >
-                Login
+                Create account
               </Button>
 
               <p className="text-center" style={{ marginTop: "20px" }}>
-                Don't have an account?{" "}
-                <a href=" " onClick={() => navigate("/registration")}>
-                  Register
+              Already have an account?{" "}
+                <a href=" " onClick={() => navigate("/login")}>
+                  Sign in
                 </a>
               </p>
 
