@@ -9,6 +9,4 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByUsername(String username);
-    @Query("SELECT u from User u join Authority a on u.id=a.user.id where a.role='student'")
-    List<User> findStudents();
 }

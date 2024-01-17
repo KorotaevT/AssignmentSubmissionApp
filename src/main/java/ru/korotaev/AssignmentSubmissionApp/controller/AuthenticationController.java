@@ -1,8 +1,11 @@
 package ru.korotaev.AssignmentSubmissionApp.controller;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,7 +22,6 @@ import ru.korotaev.AssignmentSubmissionApp.util.RegisterRequest;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 public class AuthenticationController {
-
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
 
@@ -71,7 +73,11 @@ public class AuthenticationController {
 
     @GetMapping("/validation")
     public ResponseEntity<?> validateToken(@RequestParam String token, @AuthenticationPrincipal User user){
+        try {
             boolean isTokenValid = jwtService.isTokenValid(token, user);
             return ResponseEntity.ok(isTokenValid);
+        }catch (ExpiredJwtException e) {
+            return ResponseEntity.ok(false);
+        }
     }
 }

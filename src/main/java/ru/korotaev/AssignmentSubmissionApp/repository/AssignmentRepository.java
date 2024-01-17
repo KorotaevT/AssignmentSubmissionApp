@@ -6,6 +6,7 @@ import ru.korotaev.AssignmentSubmissionApp.model.Assignment;
 import ru.korotaev.AssignmentSubmissionApp.model.Comment;
 import ru.korotaev.AssignmentSubmissionApp.model.User;
 
+import java.util.List;
 import java.util.Set;
 
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {

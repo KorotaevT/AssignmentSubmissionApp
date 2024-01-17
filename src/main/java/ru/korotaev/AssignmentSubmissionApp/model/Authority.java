@@ -1,6 +1,7 @@
 package ru.korotaev.AssignmentSubmissionApp.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,7 @@ public class Authority implements GrantedAuthority {
     @Enumerated(EnumType.STRING)
     private Role role;
     @ManyToOne(optional = false)
+    @JsonIgnore
     private User user;
 
     public Authority(Role role) {
