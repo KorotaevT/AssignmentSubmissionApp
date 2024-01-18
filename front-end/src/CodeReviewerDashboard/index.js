@@ -70,7 +70,7 @@ const CodeReviewerDashboard = () => {
       </Row>
       <Row>
         <Col>
-          <div className="h1">Code Reviewer Dashboard</div>
+          <div className="h1 d-flex justify-content-center align-items-center">Code Reviewer Dashboard</div>
         </Col>
       </Row>
       <div className="assignment-wrapper in-review">

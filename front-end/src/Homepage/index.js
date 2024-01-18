@@ -1,37 +1,50 @@
 import React from "react";
+import { MDBContainer, MDBCol, MDBRow, MDBBtn } from "mdb-react-ui-kit";
 import { Button } from "react-bootstrap";
-import { useUser } from "../UserProvider";
-import { useNavigate } from "react-router-dom";
 
-const HomePage = () => {
-    const user = useUser();
-    const navigate = useNavigate();
+function App() {
+  return (
+    <MDBContainer fluid className="p-5 my-5">
+      <MDBRow>
+        <MDBCol col="4" md="6">
+          <img
+            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+            class="img-fluid"
+            alt="Sample image"
+          />
+        </MDBCol>
 
-    return (
-        <div className="center-container">
-            <h1>HomePage</h1>
-            <div className="button-container mt-4">
-                <Button
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                        user.setJwt(null);
-                        navigate("/login");
-                    }}
-                >
-                    Login
-                </Button>
-                <Button
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                        user.setJwt(null);
-                        navigate("/registration");
-                    }}
-                >
-                    Register
-                </Button>
-            </div>
-        </div>
-    );
-};
+        <MDBCol col="4" md="6">
+          <h1
+            className="text-black mb-5 d-flex justify-content-center align-items-center"
+            style={{ marginTop: "10px" }}
+          >
+            Task Review Service
+          </h1>
+          <div style={{ marginTop: "120px" }}>
+            <Button
+              className="mb-5 w-100"
+              size="lg"
+              onClick={() => {
+                window.location.href = "/registration";
+              }}
+            >
+              Registration
+            </Button>
+            <Button
+              className="mb-5 w-100"
+              size="lg"
+              onClick={() => {
+                window.location.href = "/login";
+              }}
+            >
+              Login
+            </Button>
+          </div>
+        </MDBCol>
+      </MDBRow>
+    </MDBContainer>
+  );
+}
 
-export default HomePage;
+export default App;
