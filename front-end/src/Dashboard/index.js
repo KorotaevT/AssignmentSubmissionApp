@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useLocalState } from "../util/useLocalStorage";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
 import Card from "react-bootstrap/Card";
-import { Badge, Button, Col, Row } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import StatusBadge from "../StatusBadge";
 import { useUser } from "../UserProvider";
+import config from "../config";
 
 const Dashboard = () => {
   const user = useUser();
@@ -13,7 +13,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    ajax("http://localhost:8080/api/assignments", "GET", user.jwt).then(
+    ajax(`${config.baseURL}/api/assignments`, "GET", user.jwt).then(
       (assignmentsData) => {
         setAssignments(assignmentsData);
       }
@@ -25,7 +25,7 @@ const Dashboard = () => {
   }, [user.jwt]);
 
   function createAssignment() {
-    ajax("http://localhost:8080/api/assignments", "POST", user.jwt).then(
+    ajax(`${config.baseURL}/api/assignments`, "POST", user.jwt).then(
       (assignment) => {
         window.location.href = `/assignments/${assignment.id}`;
       }

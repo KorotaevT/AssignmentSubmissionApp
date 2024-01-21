@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
 import { useUser } from "../UserProvider";
+import config from "../config";
 
 const PrivateRoute = ({ children }) => {
   const user = useUser();
@@ -10,7 +11,7 @@ const PrivateRoute = ({ children }) => {
 
   if (user) {
     ajax(
-      `http://localhost:8080/api/auth/validation?token=${user.jwt}`,
+      `${config.baseURL}/api/auth/validation?token=${user.jwt}`,
       "GET",
       user.jwt
     ).then((isValid) => {

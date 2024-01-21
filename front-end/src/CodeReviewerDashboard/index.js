@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useLocalState } from "../util/useLocalStorage";
-import { Link, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import ajax from "../Services/fetchService";
 import Card from "react-bootstrap/Card";
-import { Badge, Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import { jwtDecode } from "jwt-decode";
 import StatusBadge from "../StatusBadge";
 import { useUser } from "../UserProvider";
+import config from "../config";
 
 const CodeReviewerDashboard = () => {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const CodeReviewerDashboard = () => {
     assignment.codeReviewer = codeReviewer;
     assignment.status = "In Review";
     ajax(
-      `http://localhost:8080/api/assignments/${assignment.id}`,
+      `${config.baseURL}/api/assignments/${assignment.id}`,
       "PUT",
       user.jwt,
       assignment
@@ -45,7 +45,7 @@ const CodeReviewerDashboard = () => {
   }
 
   useEffect(() => {
-    ajax("http://localhost:8080/api/assignments", "GET", user.jwt).then(
+    ajax(`${config.baseURL}/api/assignments`, "GET", user.jwt).then(
       (assignmentsData) => {
         setAssignments(assignmentsData);
       }

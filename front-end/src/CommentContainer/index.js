@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ajax from "../Services/fetchService";
 import { useUser } from "../UserProvider";
-import { Button, Col, Form, Overlay, Row, Tooltip } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import Comment from "../Comment";
 import dayjs from "dayjs";
 import { useInterval } from "../util/useInterval";
+import config from "../config";
 
 const CommentContainer = (props) => {
   const { assignmentId } = props;
@@ -48,7 +49,7 @@ const CommentContainer = (props) => {
     const commentsCopy = [...comments];
     const i = commentsCopy.findIndex((comment) => comment.id === commentId);
     ajax(
-      `http://localhost:8080/api/comments/${commentId}`,
+      `${config.baseURL}/api/comments/${commentId}`,
       "DELETE",
       user.jwt,
       null
@@ -60,7 +61,7 @@ const CommentContainer = (props) => {
 
   useEffect(() => {
     ajax(
-      `http://localhost:8080/api/comments?assignmentId=${assignmentId}`,
+      `${config.baseURL}/api/comments?assignmentId=${assignmentId}`,
       "GET",
       user.jwt,
       null
@@ -78,7 +79,7 @@ const CommentContainer = (props) => {
   function submitComment() {
     if (comment.id) {
       ajax(
-        `http://localhost:8080/api/comments/${comment.id}`,
+        `${config.baseURL}/api/comments/${comment.id}`,
         "PUT",
         user.jwt,
         comment
@@ -91,7 +92,7 @@ const CommentContainer = (props) => {
       });
     } else {
       ajax(
-        `http://localhost:8080/api/comments`,
+        `${config.baseURL}/api/comments`,
         "POST",
         user.jwt,
         comment

@@ -18,6 +18,7 @@ import { useUser } from "../UserProvider";
 import Comment from "../Comment";
 import dayjs from "dayjs";
 import CommentContainer from "../CommentContainer";
+import config from "../config";
 
 const AssignmentView = () => {
   let navigate = useNavigate();
@@ -50,7 +51,7 @@ const AssignmentView = () => {
 
   function persist() {
     ajax(
-      `http://localhost:8080/api/assignments/${assignmentId}`,
+      `${config.baseURL}/api/assignments/${assignmentId}`,
       "PUT",
       user.jwt,
       assignment
@@ -68,7 +69,7 @@ const AssignmentView = () => {
 
   useEffect(() => {
     ajax(
-      `http://localhost:8080/api/assignments/${assignmentId}`,
+      `${config.baseURL}/api/assignments/${assignmentId}`,
       "GET",
       user.jwt
     ).then((assignmentResponse) => {

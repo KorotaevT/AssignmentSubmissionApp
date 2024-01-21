@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Row, Form } from "react-bootstrap";
+import React, {useState } from "react";
+import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../UserProvider";
 import {
   MDBContainer,
   MDBInput,
-  MDBBtn,
   MDBCol,
   MDBRow,
   MDBCard,
   MDBCardBody,
 } from "mdb-react-ui-kit";
+import config from "../config";
 
 const Login = () => {
   const user = useUser();
@@ -24,9 +24,8 @@ const Login = () => {
       password: password,
     };
 
-    fetch("http://localhost:8080/api/auth/authentication", {
+    fetch(`${config.baseURL}/api/auth/authentication`, {
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost:3000",
         "Content-Type": "application/json",
       },
       method: "POST",
