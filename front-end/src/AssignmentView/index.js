@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocalState } from "../util/useLocalStorage";
 import ajax from "../Services/fetchService";
 import {
   Badge,
@@ -15,10 +14,7 @@ import {
 import StatusBadge from "../StatusBadge";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../UserProvider";
-import Comment from "../Comment";
-import dayjs from "dayjs";
 import CommentContainer from "../CommentContainer";
-import config from "../config";
 
 const AssignmentView = () => {
   let navigate = useNavigate();
@@ -51,7 +47,7 @@ const AssignmentView = () => {
 
   function persist() {
     ajax(
-      `${config.baseURL}/api/assignments/${assignmentId}`,
+      `/api/assignments/${assignmentId}`,
       "PUT",
       user.jwt,
       assignment
@@ -69,7 +65,7 @@ const AssignmentView = () => {
 
   useEffect(() => {
     ajax(
-      `${config.baseURL}/api/assignments/${assignmentId}`,
+      `/api/assignments/${assignmentId}`,
       "GET",
       user.jwt
     ).then((assignmentResponse) => {

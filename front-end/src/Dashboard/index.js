@@ -5,7 +5,6 @@ import Card from "react-bootstrap/Card";
 import { Button, Col, Row } from "react-bootstrap";
 import StatusBadge from "../StatusBadge";
 import { useUser } from "../UserProvider";
-import config from "../config";
 
 const Dashboard = () => {
   const user = useUser();
@@ -13,7 +12,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    ajax(`${config.baseURL}/api/assignments`, "GET", user.jwt).then(
+    ajax(`/api/assignments`, "GET", user.jwt).then(
       (assignmentsData) => {
         setAssignments(assignmentsData);
       }
@@ -25,7 +24,7 @@ const Dashboard = () => {
   }, [user.jwt]);
 
   function createAssignment() {
-    ajax(`${config.baseURL}/api/assignments`, "POST", user.jwt).then(
+    ajax(`/api/assignments`, "POST", user.jwt).then(
       (assignment) => {
         window.location.href = `/assignments/${assignment.id}`;
       }

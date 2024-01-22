@@ -6,7 +6,6 @@ import { Button, Col, Container, Row } from "react-bootstrap";
 import { jwtDecode } from "jwt-decode";
 import StatusBadge from "../StatusBadge";
 import { useUser } from "../UserProvider";
-import config from "../config";
 
 const CodeReviewerDashboard = () => {
   const navigate = useNavigate();
@@ -32,7 +31,7 @@ const CodeReviewerDashboard = () => {
     assignment.codeReviewer = codeReviewer;
     assignment.status = "In Review";
     ajax(
-      `${config.baseURL}/api/assignments/${assignment.id}`,
+      `/api/assignments/${assignment.id}`,
       "PUT",
       user.jwt,
       assignment
@@ -45,7 +44,7 @@ const CodeReviewerDashboard = () => {
   }
 
   useEffect(() => {
-    ajax(`${config.baseURL}/api/assignments`, "GET", user.jwt).then(
+    ajax(`/api/assignments`, "GET", user.jwt).then(
       (assignmentsData) => {
         setAssignments(assignmentsData);
       }

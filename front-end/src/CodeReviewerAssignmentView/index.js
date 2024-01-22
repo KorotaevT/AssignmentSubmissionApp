@@ -5,7 +5,6 @@ import StatusBadge from "../StatusBadge";
 import { useUser } from "../UserProvider";
 import { useNavigate, useParams } from "react-router-dom";
 import CommentContainer from "../CommentContainer";
-import config from "../config";
 
 const CodeReviewerAssignmentView = () => {
   const navigate = useNavigate();
@@ -37,7 +36,7 @@ const CodeReviewerAssignmentView = () => {
 
   function persist() {
     ajax(
-      `${config.baseURL}/api/assignments/${assignmentId}`,
+      `/api/assignments/${assignmentId}`,
       "PUT",
       user.jwt,
       assignment
@@ -55,7 +54,7 @@ const CodeReviewerAssignmentView = () => {
 
   useEffect(() => {
     ajax(
-      `${config.baseURL}/api/assignments/${assignmentId}`,
+      `/api/assignments/${assignmentId}`,
       "GET",
       user.jwt
     ).then((assignmentData) => {

@@ -15,7 +15,6 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/comments")
-@CrossOrigin(origins = "http://localhost:3000")
 public class CommentController {
 
     @Autowired

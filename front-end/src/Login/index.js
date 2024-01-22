@@ -10,7 +10,6 @@ import {
   MDBCard,
   MDBCardBody,
 } from "mdb-react-ui-kit";
-import config from "../config";
 
 const Login = () => {
   const user = useUser();
@@ -24,7 +23,7 @@ const Login = () => {
       password: password,
     };
 
-    fetch(`${config.baseURL}/api/auth/authentication`, {
+    fetch(`/api/auth/authentication`, {
       headers: {
         "Content-Type": "application/json",
       },

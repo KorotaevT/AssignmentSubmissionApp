@@ -9,7 +9,6 @@ import {
   MDBCard,
   MDBCardBody,
 } from "mdb-react-ui-kit";
-import config from "../config";
 import { Button } from "react-bootstrap";
 
 const Login = () => {
@@ -24,9 +23,9 @@ const Login = () => {
       password: password,
     };
 
-    fetch(`${config.baseURL}/api/auth/registration`, {
+    fetch(`/api/auth/registration`, {
       headers: {
-        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Origin": "http://front-end:3000",
         "Content-Type": "application/json",
       },
       method: "POST",

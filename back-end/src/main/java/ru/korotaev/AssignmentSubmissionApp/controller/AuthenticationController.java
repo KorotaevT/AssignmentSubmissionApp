@@ -20,7 +20,6 @@ import ru.korotaev.AssignmentSubmissionApp.util.RegisterRequest;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;

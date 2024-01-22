@@ -17,7 +17,6 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/assignments")
-@CrossOrigin(origins = "http://localhost:3000")
 public class AssignmentController {
 
     @Autowired
